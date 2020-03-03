@@ -6,6 +6,7 @@ var env = require('dotenv').config({path: __dirname + '/.env'});
 
 // init project
 var express = require('express');
+//var reload = require('express-reload');
 var app = express();
 
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
@@ -38,10 +39,27 @@ app.get("/api/timestamp", function(req, res) {
 
 app.get("/api/timestamp/:date_string?", function(req, res) {
   const pattern = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/g;
-  if(pattern.test(req.params.date_string))
-    res.json({"unix": null, "utc" : "Invalid Date" });
-});
+  const numPatter = /^-{0,1}\d+$/;
+  const date = req.params.date_string;
 
+  if(!pattern.test(date) && !numPatter.test(date)) {
+    res.json({"unix": null, "utc" : "Invalid Date" });
+  } else {
+    let resp = new Date(date);
+    if(resp == "Invalid Date")
+      resp = new Date(parseInt(date));
+    
+    res.json({
+      "unix": resp.getTime(),
+      "utc": resp.toUTCString()
+    });
+  }
+});
+/*
+var path = __dirname + '/server.js';
+console.log("aaaaaa" + path);
+app.use(reload(path));
+*/
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
