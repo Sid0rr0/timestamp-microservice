@@ -38,11 +38,13 @@ app.get("/api/timestamp", function(req, res) {
 });
 
 app.get("/api/timestamp/:date_string?", function(req, res) {
-  const pattern = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/g;
-  const numPatter = /^-{0,1}\d+$/;
+  const pattern = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\d|3[01])$/;
+  const numPatter = /^-{0,1}\d{4,}\d+$/;
   const date = req.params.date_string;
 
   if(!pattern.test(date) && !numPatter.test(date)) {
+    //this is tested in FCC
+    //res.json({"error" : "Invalid Date" });
     res.json({"unix": null, "utc" : "Invalid Date" });
   } else {
     let resp = new Date(date);
@@ -55,6 +57,7 @@ app.get("/api/timestamp/:date_string?", function(req, res) {
     });
   }
 });
+
 /*
 var path = __dirname + '/server.js';
 console.log("aaaaaa" + path);
