@@ -1,6 +1,9 @@
 // server.js
 // where your node app starts
 
+var path = require('path');
+var env = require('dotenv').config({path: __dirname + '/.env'});
+
 // init project
 var express = require('express');
 var app = express();
@@ -24,7 +27,20 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+app.get("/api/timestamp", function(req, res) {
+  const newDate = new Date();
 
+  res.json({
+    "unix": newDate.getTime(),
+    "utc": newDate.toUTCString()
+  });
+});
+
+app.get("/api/timestamp/:date_string?", function(req, res) {
+  const pattern = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/g;
+  if(pattern.test(req.params.date_string))
+    res.json({"unix": null, "utc" : "Invalid Date" });
+});
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {

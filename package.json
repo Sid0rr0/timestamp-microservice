@@ -8,6 +8,7 @@
 	},
 	"dependencies": {
 		"express": "^4.12.4",
+		"dotenv": "^8.2.0",
 		"cors": "^2.8.0"
 	},
 	"engines": {
@@ -23,5 +24,8 @@
 		"express",
 		"freecodecamp"
 	],
-	"license": "MIT"
+	"license": "MIT",
+	"devDependencies": {
+		"express-reload": "^1.2.0"
+	}
 }
